@@ -1,0 +1,17 @@
+	
+	CHECKINPARAMETERS:
+
+	expressGeoRequiredIn	tinyint(1)			No	1			Cambiar Cambiar	Eliminar Eliminar	
+	expressGeoRequiredOut	tinyint(1)			No	1			Cambiar Cambiar	Eliminar Eliminar	
+	expressPhotoRequiredIn	tinyint(1)			No	1			Cambiar Cambiar	Eliminar Eliminar	
+	expressPhotoRequiredOut	tinyint(1)			No	1			Cambiar Cambiar	Eliminar Eliminar	
+
+
+	REPORTS PARAMETERS 
+expressMinPhotosMandatory	smallint(6)			No	3			Cambiar Cambiar	Eliminar Eliminar	
+	14	expressMaxPhotosMandatory	smallint(6)			No	6			Cambiar Cambiar	Eliminar Eliminar	
+	15	expressMinPhotosOptional	int(11)			No	0			Cambiar Cambiar	Eliminar Eliminar	
+	16	expressMaxPhotosOptional
+|
+	Ya existen: 	maxPhotoAllowed	smallint(6)			No	9			Cambiar Cambiar	Eliminar Eliminar	
+	7	minPhotosAllowed

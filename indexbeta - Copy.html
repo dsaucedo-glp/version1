@@ -1,0 +1,2547 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Go Local Promotions - Web App</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style-beta-4000.css?v=4000-10291647">
+</head>
+
+<body>
+    <header>
+        <!-- Botón hamburguesa -->
+        <button type="button" id="hamburgerBtn" aria-label="Menu 2.0" title="Menu 2.0">
+            <i class="bi bi-list"></i>
+        </button>
+        <img src="img/GoLocalLogoWhite148.png" alt="Logo" width="60%" height="auto">
+        <div id="userAvatar" hidden>YI</div>
+    </header>
+
+    <!-- Menú lateral -->
+    <nav id="sideMenu" class="closed" aria-hidden="true" inert>
+
+        <div class="sideMenu-header">
+            <span>Menu</span>
+            <button type="button" id="closeMenuBtn" aria-label="Close menu" title="Close">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <ul class="sideMenu-list">
+            <li>
+                <button type="button" class="sideMenu-item" id="menuContact">
+                    <i class="bi bi-chat-dots"></i> Technical Support
+                </button>
+            </li>
+
+            <li id="menuTrainingVideosLi" hidden>
+                <button type="button" class="sideMenu-item" id="menuTrainingVideos">
+                    <i class="bi bi-play-circle"></i>
+                    <span class="menu-text">Training Videos</span>
+                </button>
+            </li>
+
+            <li id="menuSchedulerLi" hidden>
+                <button type="button" class="sideMenu-item" id="menuScheduler">
+                    <i class="bi bi-calendar3"></i> Upcoming Shifts
+                </button>
+            </li>
+
+            <li id="menuLastPayrollLi" hidden>
+                <button type="button" class="sideMenu-item" id="menuLastPayroll">
+                    <i class="bi bi-wallet2"></i> Last Payroll
+                </button>
+            </li>
+
+            <li id="menuReimbursementsLi" hidden>
+                <button type="button" id="menuReimbursements" class="sideMenu-item sideMenu-item--with-caret"
+                    aria-expanded="false" aria-controls="menuReimbursementsSubmenu">
+                    <i class="bi bi-receipt"></i>
+                    <span class="menu-text">Reimbursements</span>
+                    <i class="bi bi-chevron-down menu-caret" aria-hidden="true"></i>
+                </button>
+
+                <div id="menuReimbursementsSubmenu" class="sideMenu-submenu" hidden>
+                    <button type="button" class="sideMenu-subitem" id="menuReimbRequest">
+                        <i class="bi bi-plus-circle"></i>
+                        <span class="menu-text">Reimbursement Request</span>
+                    </button>
+
+                    <button type="button" class="sideMenu-subitem" id="menuMyReimbursements">
+                        <i class="bi bi-card-list"></i>
+                        <span class="menu-text">My Reimbursements</span>
+                    </button>
+                </div>
+            </li>
+
+            <li id="menuPayrollLi" hidden>
+                <button type="button" class="sideMenu-item" id="menuPayroll">
+                    <i class="bi bi-cash-stack"></i> Next Payroll
+                </button>
+            </li>
+
+            <li id="menuReportsLi" hidden>
+                <button type="button" class="sideMenu-item" id="menuReports">
+                    <i class="bi bi-file-earmark-text"></i>
+                    <span class="menu-text">Pending Reports</span>
+                    <span id="reportsBadge" class="badge-pill" aria-live="polite" aria-atomic="true"
+                        style="display:none">0</span>
+                </button>
+            </li>
+
+            <li id="menuManualHoursLi" hidden>
+                <button type="button" class="sideMenu-item" id="menuManualHours">
+                    <i class="bi bi-clock-history"></i>
+                    <span class="menu-text">Add Admin Hours</span>
+                </button>
+            </li>
+
+        </ul>
+
+    </nav>
+    <div id="sideMenuBackdrop"></div>
+
+    <main>
+        <div class="container">
+
+            <!-- VISTA PRINCIPAL (Check In / Break / Out) -->
+            <section id="main-view" aria-live="polite">
+                <p></p>
+                <p></p>
+                <div class="gl-login-hero" aria-label="Go Local Promotions">
+                    <img class="gl-login-logo" src="img/GoLocalLogoWhite148.png" alt="Go Local Promotions">
+                    <div class="gl-login-slogan" aria-label="We make it happen">
+                        <span>WE</span>
+                        <span>MAKE IT</span>
+                        <span>HAPPEN</span>
+                    </div>
+                </div>
+                <h4 id="mainLabel">WE MAKE IT HAPPEN!</h4>
+                <p></p>
+                <p></p>
+                <p></p>
+                <div class="gl-login-panel">
+                    <div id="code-container">
+                        <label class="gl-login-access-label" for="codeInput">ACCESS CODE</label>
+                        <input type="text" id="codeInput" autocomplete="off" autocapitalize="characters"
+                            autocorrect="off" spellcheck="false" inputmode="text" placeholder="Enter your code"
+                            maxlength="8" oninput="this.value = this.value.toUpperCase()" />
+                        <p></p>
+                        <button type="button" id="loginBtn" onclick="validateCode()">Continue</button>
+                        <p></p>
+                        <div id="responseMessage" style="display:none;"></div>
+                        <p></p>
+                        <div class="forgot-code-wrap">
+                            <button type="button" id="forgotCodeBtn" class="forgot-code-btn d-none">
+                                Forgot your code?
+                            </button>
+                        </div>
+                        <p></p>
+                        <p></p>
+                        <span id="versionLabel"></span>
+                    </div>
+                </div><!-- /.gl-login-panel -->
+
+                <div id="selected-shift-info" style="display: none;"></div>
+                <div id="action-container" style="display: none;"></div>
+
+                <div id="timers">
+                    <div id="break-timer" style="display: none;">
+                        <div class="gl-break-timer-card">
+                            <span class="gl-break-timer-label">ELAPSED BREAK TIME:</span>
+                            <span id="break-chrono">00:00:00</span>
+                        </div>
+                    </div>
+                    <div id="shift-timer" style="display: none;">
+                        <p style="display: none;">Elapsed Shift Time: <span id="shift-chrono">00:00:00</span></p>
+                    </div>
+                </div>
+
+
+
+                <!-- Modal de cámara (mantenido por compatibilidad futura) -->
+                <div id="cameraModal" class="modal" style="display: none;">
+                    <video id="video" autoplay playsinline></video>
+                    <button type="button" onclick="takePhoto()">Take Photo</button>
+                </div>
+
+                <!-- Canvas oculto para capturar imagen -->
+                <canvas id="photoCanvas" style="display: none;"></canvas>
+            </section>
+
+            <!-- VISTA SCHEDULER -->
+            <section id="scheduler-view" aria-live="polite" style="display:none;">
+
+                <div class="gl-scheduler-header">
+                    <div class="gl-scheduler-heading-row">
+
+                        <h2 class="gl-scheduler-title gl-section-title">
+                            <span class="gl-scheduler-title-accent gl-title-primary">UPCOMING</span>
+                            <span class="gl-scheduler-title-light gl-title-secondary">SHIFTS</span>
+                        </h2>
+
+                        <button type="button" id="closeSchedulerBtn" class="gl-scheduler-close"
+                            aria-label="Close Upcoming Shifts">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="gl-scheduler-content">
+
+                    <div id="schedulerEmpty" class="gl-scheduler-empty" style="display:none;">
+
+                        <div class="gl-scheduler-empty-logo" aria-hidden="true">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div>
+
+                        <div class="gl-scheduler-empty-text">
+                            NO SHIFTS TO SHOW
+                        </div>
+
+                    </div>
+
+                    <div id="scheduler-list" class="gl-scheduler-list"></div>
+
+                </div>
+
+            </section>
+
+            <section id="todo-view" aria-live="polite" style="display:none;">
+                <div class="scheduler-header">
+                    <div class="header-close-row">
+                        <button type="button" id="closeToDoBtn" class="section-close-red" aria-label="Close To Do List">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="header-title-row">
+                        <h4 class="scheduler-title">TO DO LIST</h4>
+                    </div>
+                </div>
+
+                <div id="toDoEmpty" class="scheduler-empty" style="display:none;">
+                    <span>No jobs to show.</span>
+                </div>
+
+                <div id="todo-list" class="scheduler-list"></div>
+            </section>
+
+            <!-- VISTA REPORTES (SPA)  -->
+            <section id="reports-view" aria-live="polite" style="display:none;">
+                <div class="reports-header gl-section-header">
+                    <h2 class="reports-title gl-section-title">
+                        <span class="gl-title-primary">PENDING</span>
+                        <span class="gl-title-secondary">REPORTS</span>
+                    </h2>
+
+                    <button id="closeReportsBtn" type="button" class="gl-reports-close"
+                        aria-label="Close Pending Reports">
+                        <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div id="reportsEmpty" class="reports-empty" style="display:none;">
+                    <span>No pending reports.</span>
+                </div>
+                <!-- lista tipo Scheduler -->
+                <div id="reports-list" class="scheduler-list">
+                    <!-- cards via JS -->
+                </div>
+            </section>
+
+            <!-- VISTA NEXT PAYROLL (SPA) -->
+            <section id="payroll-view" aria-live="polite" style="display:none;">
+                <div class="payroll-header gl-section-header">
+                    <div class="header-title-row">
+                        <h2 class="payroll-title gl-section-title" id="payrollTitleSum">
+                            <span class="gl-title-primary">NEXT</span>
+                            <span class="gl-title-secondary">PAYROLL</span>
+                        </h2>
+                    </div>
+                    <button type="button" id="closePayrollBtn" class="section-close-red"
+                        aria-label="Close Next Payroll">
+                        <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div id="payrollEmpty" class="payroll-empty" style="display:none;">
+                    <span>No payroll records to show.</span>
+                </div>
+                <div id="payroll-list" class="scheduler-list"></div>
+            </section>
+
+            <!-- =========================================================
+                MANUAL HOURS
+            ========================================================= -->
+            <section id="manual-hours-view" class="app-section" style="display:none;">
+                <!-- ADD ADMIN HOURS — BRAND HEADER -->
+                <div class="reimb-header gl-section-header">
+                    <div class="header-title-row">
+                        <h2 class="reimb-title gl-section-title">
+                            <span class="gl-title-primary">ADD</span>
+                            <span class="gl-title-secondary">ADMIN HOURS</span>
+                        </h2>
+                    </div>
+                    <button type="button" id="closeManualHoursBtn" class="section-close-red"
+                        aria-label="Close Admin Hours">
+                        <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="section-body">
+                    <!-- WORKER -->
+                    <div class="mb-3">
+                        <input type="text" id="manualHoursWorker" class="form-control" readonly>
+                    </div>
+                    <!-- DATE -->
+                    <div class="mb-3">
+                        <label for="manualHoursDate" class="form-label fw-semibold">
+                            Date
+                        </label>
+                        <input type="date" id="manualHoursDate" class="form-control">
+                    </div>
+                    <!-- START -->
+                    <div class="mb-3">
+                        <label for="manualHoursStart" class="form-label fw-semibold">
+                            Start
+                        </label>
+                        <select id="manualHoursStart" class="form-select">
+                            <option value="">Select Start Time</option>
+                            <option value="06:00">6:00 AM</option>
+                            <option value="07:00">7:00 AM</option>
+                            <option value="08:00">8:00 AM</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                            <option value="18:00">6:00 PM</option>
+                            <option value="19:00">7:00 PM</option>
+                            <option value="20:00">8:00 PM</option>
+                            <option value="21:00">9:00 PM</option>
+                            <option value="22:00">10:00 PM</option>
+                            <option value="23:00">11:00 PM</option>
+
+                        </select>
+                    </div>
+
+                    <!-- DURATION -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            Duration
+                        </label>
+                        <div class="manual-hours-duration">
+                            <div>
+                                <input type="number" id="manualHoursDurationHours" class="form-control text-center"
+                                    min="0" max="24" step="1" inputmode="numeric" placeholder="HH">
+                                <div class="manual-hours-unit">
+                                    hours
+                                </div>
+                            </div>
+                            <div class="manual-hours-duration-colon">:
+                            </div>
+                            <div>
+                                <input type="number" id="manualHoursDurationMinutes" class="form-control text-center"
+                                    min="0" max="59" step="1" inputmode="numeric" placeholder="MM">
+                                <div class="manual-hours-unit">
+                                    minutes
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COMPLETED TASKS -->
+                    <div class="mb-3 rc-group" id="grp_manualHoursCompletedTasks">
+                        <label for="manualHoursCompletedTasks" class="form-label rc-label rc-label--row">
+                            <span>COMPLETED TASKS</span>
+                            <button type="button" id="btnManualHoursMic"
+                                class="btn btn-sm btn-outline-primary rc-trans-btn" aria-pressed="false">
+                                <i class="bi bi-mic" aria-hidden="true"></i>
+                            </button>
+                            <span id="manualHoursMicStatus" style="margin-left:6px; font-size:.9rem; color:#6b7280;">
+                            </span>
+                        </label>
+                        <textarea id="manualHoursCompletedTasks" class="form-control" rows="3" maxlength="5000"
+                            placeholder="Describe the tasks completed..." required></textarea>
+                    </div>
+
+                    <!-- OPERATION MESSAGE -->
+                    <div id="manualHoursMessage" class="alert mt-3" style="display:none;">
+                    </div>
+                    <!-- ACTIONS -->
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="button" id="btnCancelManualHours" class="btn btn-danger flex-fill">
+                            <i class="bi bi-x-lg me-1"></i>
+                            Cancel
+                        </button>
+                        <button type="button" id="btnSubmitManualHours" class="btn btn-success flex-fill">
+                            <i class="bi bi-check-lg me-1"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- VISTA LAST PAYROLL (SPA) -->
+            <section id="lastpayroll-view" aria-live="polite" style="display:none;">
+                <div class="lp-header">
+                    <h4 class="lp-title" id="lpTitleSum">LAST PAYROLL</h4>
+                    <button type="button" id="closeLastPayrollBtn" class="header-close close-btn is-red"
+                        aria-label="Close Last Payroll">
+                        <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div id="lpEmpty" class="lp-empty" style="display:none;">
+                    <span>No payroll records to show.</span>
+                </div>
+                <!-- lista tipo Scheduler -->
+                <div id="last-list" class="scheduler-list">
+                    <!-- cards via JS -->
+                </div>
+            </section>
+
+            <!-- VISTA REPORT CAPTURE (SPA) -->
+            <section id="report-capture-view" aria-live="polite" style="display:none;">
+                <div class="rc-header gl-section-header">
+                    <div class="header-title-row">
+                        <h4 class="rc-title gl-section-title">
+                            <span class="gl-title-secondary">REPORT</span>
+                        </h4>
+                    </div>
+                    <button type="button" id="rcCloseBtn" class="section-close-red" aria-label="Close Report">
+                        <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    </button>
+                    <div class="rc-subtitle-row">
+                        <div id="rcSubtitle" class="rc-subtitle" aria-live="polite"></div>
+                    </div>
+                </div>
+                <!-- Stepper / wizard -->
+                <div hidden="rc-steps" id="rcSteps"><!-- steps via JS --></div>
+                <form id="rcForm" class="rc-form" novalidate>
+                    <div id="rcSections"><!-- sections+fields via JS --></div>
+                </form>
+                <div class="rc-footer">
+                    <button type="button" id="rcPrev" class="btn btn-light">
+                        <i class="bi bi-chevron-left"></i> Back
+                    </button>
+                    <button type="button" id="rcNext" class="btn btn-primary">
+                        Next <i class="bi bi-chevron-right"></i>
+                    </button>
+                    <button type="button" id="rcSubmit" class="btn btn-primary" style="display:none">
+                        <i class="bi bi-send"></i> Submit
+                    </button>
+                </div>
+            </section>
+
+            <!-- ========== REIMBURSEMENTS VIEW (SPA) ========== -->
+            <section id="reimb-view" style="display:none">
+                <!-- REIMBURSEMENT REQUEST — BRAND HEADER -->
+                <div class="reimb-header gl-section-header">
+                    <div class="header-title-row">
+                        <h2 class="reimb-title gl-section-title">
+                            <span class="gl-title-primary">REIMBURSEMENT</span>
+                            <span class="gl-title-secondary">REQUEST</span>
+                        </h2>
+                    </div>
+                    <button type="button" id="closeReimbBtn" class="section-close-red"
+                        aria-label="Close reimbursements">
+                        <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <!-- Card/cuerpo debajo del header -->
+                <div class="reimb-wrap">
+                    <form id="reimbForm" class="rc-form" novalidate>
+                        <!-- Shift to apply: one shift per request -->
+                        <div class="rc-group" id="grp_reimbShift">
+                            <label class="rc-label is-required" for="reimbShift">
+                                SHIFT TO APPLY<span class="rc-req" aria-hidden="true"></span>
+                            </label>
+                            <select id="reimbShift" class="rc-select"></select>
+                            <div class="rc-error" id="err_reimbShift" style="display:none"></div>
+                        </div>
+                        <!-- Add receipt one by one -->
+                        <div class="rc-group" id="grp_reimbReceipt">
+                            <label class="rc-label is-required" for="reimbReceipt">
+                                RECEIPTS<span class="rc-req" aria-hidden="true"></span>
+                            </label>
+                            <div id="reimbAddFileBlock">
+                                <label class="btn btn-light file-btn">
+                                    <i class="bi bi-paperclip"></i> Add receipt
+                                    <input id="reimbReceipt" type="file"
+                                        accept="image/*,image/heic,image/heif,.heic,.heif" hidden>
+                                </label>
+
+                                <div class="rc-help" id="reimbMaxReceiptsHelp">
+                                    Add receipts one by one.
+                                </div>
+                            </div>
+                            <div id="reimbFileStatusBanner" class="alert reimb-banner py-2 mt-2 mb-0"
+                                style="display:none;"></div>
+
+                            <div class="rc-error" id="err_reimbReceipt" style="display:none"></div>
+                        </div>
+                        <!-- Total -->
+                        <div class="reimb-total-box">
+                            <span>Total Request</span>
+                            <input id="reimbTotal" type="text" class="rc-input" value="0.00" readonly>
+                        </div>
+                        <!-- Receipts list -->
+                        <div id="reimbReceiptsList" class="reimb-receipts-list">
+                            <div class="reimb-empty-list">No receipts added yet.</div>
+                        </div>
+                        <div id="reimbSubmitStatusBanner" class="alert reimb-banner py-2 mb-2" style="display:none;">
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="rc-footer">
+                            <button type="button" id="reimbCancel" class="btn">Cancel</button>
+                            <button type="button" id="reimbSubmit" class="btn">
+                                <i class="bi bi-check2"></i> Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- TRAINING VIDEOS  VIEW -->
+            <section id="training-videos-view" aria-live="polite" style="display:none;">
+
+                <div class="gl-training-header">
+                    <div class="gl-training-heading-row">
+                        <h2 class="gl-section-title">
+                            <span class="gl-title-primary">TRAINING</span>
+                            <span class="gl-title-secondary">VIDEOS</span>
+                        </h2>
+                        <button type="button" id="closeTrainingVideosBtn" class="gl-training-close"
+                            aria-label="Close Training Videos">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gl-training-content">
+                    <div id="trainingVideosEmpty" class="gl-training-empty" style="display:none;">
+                        <i class="bi bi-play-btn" aria-hidden="true"></i>
+                        <div>NO TRAINING VIDEOS AVAILABLE</div>
+                    </div>
+                    <div id="trainingVideosList" class="training-videos-list"></div>
+                </div>
+            </section>
+
+            <!-- ========== MY REIMBURSEMENTS VIEW ========== -->
+            <section id="myReimbursementsView" class="app-section" style="display:none;">
+                <!-- MY REIMB LIST HEADER -->
+                <div id="myReimbursementsListHeader" class="gl-my-reimb-header">
+                    <div class="gl-my-reimb-heading-row">
+                        <h2 class="gl-my-reimb-title gl-section-title">
+                            <span class="gl-my-reimb-accent gl-title-primary">MY</span>
+                            <span class="gl-my-reimb-light gl-title-secondary">REIMBURSEMENTS</span>
+                        </h2>
+                        <button type="button" id="closeMyReimbursementsView" class="gl-my-reimb-close"
+                            aria-label="Close My Reimbursements">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- MY REIMB DETAIL HEADER -->
+                <div id="myReimbursementsDetailHeader" class="gl-mr-detail-header" style="display:none;">
+                    <div class="gl-mr-detail-heading-row">
+                        <h2 class="gl-mr-detail-heading gl-section-title">
+                            <span class="gl-mr-detail-accent gl-title-primary">REIMBURSEMENT</span>
+                            <span class="gl-mr-detail-light gl-title-secondary">DETAIL</span>
+                        </h2>
+                        <button type="button" id="closeMyReimbursementsDetailView" class="gl-my-reimb-close"
+                            aria-label="Back to My Reimbursements">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LIST VIEW -->
+                <div id="myReimbursementsListWrap">
+                    <div id="myReimbursementsEmpty" class="empty-state" style="display:none;">
+                        No reimbursements found.
+                    </div>
+                    <div id="myReimbursementsList" class="pending-cards-list">
+                    </div>
+                </div>
+
+                <!-- DETAIL VIEW -->
+                <div id="myReimbursementsDetailWrap" style="display:none;">
+                    <div class="reimb-approval-card">
+                        <div class="reimb-approval-grid">
+                            <div class="mb-3">
+                                <label class="form-label">Reimbursement ID</label>
+                                <input type="text" id="mr_idReimbursement" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Promoter</label>
+                                <input type="text" id="mr_promoterName" class="form-control" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Expense Date</label>
+                                <input type="text" id="mr_expensesDate" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Amount</label>
+                                <input type="text" id="mr_amount" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Expense Type</label>
+                                <input type="text" id="mr_expensesType" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Shift Assigned</label>
+                                <input type="text" id="mr_pk" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3 full-width">
+                                <label class="form-label">Description</label>
+                                <textarea id="mr_description" class="form-control" rows="4" readonly></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <input type="text" id="mr_status" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Submitted</label>
+                                <input type="text" id="mr_submittedDate" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3" id="mr_approvedDateWrap">
+                                <label class="form-label">Approved Date</label>
+                                <input type="text" id="mr_approvedDate" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3" id="mr_rejectedDateWrap">
+                                <label class="form-label">Rejected Date</label>
+                                <input type="text" id="mr_rejectedDate" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3 full-width" id="mr_rejectionReasonWrap">
+                                <label class="form-label">Rejection Reason</label>
+                                <textarea id="mr_rejectionReason" class="form-control" rows="3" readonly></textarea>
+                            </div>
+                            <div class="mb-3 full-width">
+                                <label class="form-label">Receipts</label>
+                                <div id="mr_receiptPreview" class="receipt-preview-box ra-receipts-preview-box">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SYSTEM ADMIN VIEW -->
+            <section id="system-admin-view" class="app-view admin-scroll-view" style="display:none;">
+                <div class="admin-wrap">
+                    <div class="gl-section-header admin-header">
+                        <button type="button" id="closeSystemAdminBtn" class="gl-scheduler-close"
+                            aria-label="Close System Admin">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                        <h2 class="gl-section-title">
+                            <span class="gl-title-primary">SYSTEM</span>
+                            <span class="gl-title-secondary">ADMIN</span>
+                        </h2>
+                    </div>
+                    <div class="admin-menu-list">
+                        <button type="button" class="admin-menu-row" id="btnCheckInParams">
+                            <span class="admin-menu-row-left">
+                                <span class="admin-menu-row-icon"><i class="bi bi-geo-alt"></i></span>
+                                <span class="admin-menu-row-text">
+                                    <span class="admin-menu-row-title">Check In Parameters</span>
+                                    <span class="admin-menu-row-subtitle">Geo, photo, distance, time rules and report
+                                        requirement</span>
+                                </span>
+                            </span>
+                            <span class="admin-menu-row-arrow"><i class="bi bi-chevron-right"></i></span>
+                        </button>
+
+                        <button type="button" class="admin-menu-row" id="btnReportsParams">
+                            <span class="admin-menu-row-left">
+                                <span class="admin-menu-row-icon"><i class="bi bi-card-checklist"></i></span>
+                                <span class="admin-menu-row-text">
+                                    <span class="admin-menu-row-title">Reports Parameters</span>
+                                    <span class="admin-menu-row-subtitle">Module activation, photo validation,
+                                        limits and summary rules</span>
+                                </span>
+                            </span>
+                            <span class="admin-menu-row-arrow"><i class="bi bi-chevron-right"></i></span>
+                        </button>
+                        <button type="button" class="admin-menu-row" id="btnReimbParams">
+                            <span class="admin-menu-row-left">
+                                <span class="admin-menu-row-icon"><i class="bi bi-cash-coin"></i></span>
+                                <span class="admin-menu-row-text">
+                                    <span class="admin-menu-row-title">Reimbursement Parameters</span>
+                                    <span class="admin-menu-row-subtitle">Module activation, request rules, dates,
+                                        shift, receipt and approval flow</span>
+                                </span>
+                            </span>
+                            <span class="admin-menu-row-arrow"><i class="bi bi-chevron-right"></i></span>
+                        </button>
+                        <button type="button" class="admin-menu-row" id="btnExpressParams">
+                            <span class="admin-menu-row-left"><span class="admin-menu-row-icon"><i
+                                        class="bi bi-box-arrow-in-right"></i></span>
+                                <span class="admin-menu-row-text"><span class="admin-menu-row-title">Express
+                                        Parameters</span>
+                                    <span class="admin-menu-row-subtitle">Geo, photo, face detection, environment and
+                                        report photo limits</span></span></span>
+                            <span class="admin-menu-row-arrow"><i class="bi bi-chevron-right"></i></span>
+                        </button>
+                        <button type="button" class="admin-menu-row" id="btnUsersAdmin">
+                            <span class="admin-menu-row-left">
+                                <span class="admin-menu-row-icon"><i class="bi bi-people"></i></span>
+                                <span class="admin-menu-row-text">
+                                    <span class="admin-menu-row-title">Users</span>
+                                    <span class="admin-menu-row-subtitle">Status and supervisor level</span>
+                                </span>
+                            </span>
+                            <span class="admin-menu-row-arrow"><i class="bi bi-chevron-right"></i></span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHECK IN PARAMETERS VIEW -->
+            <section id="checkin-params-view" class="app-view admin-scroll-view" style="display:none;">
+                <div class="admin-wrap">
+                    <div class="gl-section-header">
+                        <div class="gl-section-title">
+                            <span class="gl-title-primary">STAFFING CHECK IN/OUT</span>
+                            <span class="gl-title-secondary">PARAMETERS</span>
+                        </div>
+
+                        <button type="button" id="closeCheckInParamsBtn" class="gl-scheduler-close"
+                            aria-label="Close Check In Parameters">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <div id="checkinParamsStatus" class="admin-status" style="display:none;"></div>
+
+                    <div class="admin-section-group">
+
+                        <!-- CHECK IN -->
+                        <div class="admin-param-card">
+                            <div class="admin-param-card-header">
+                                <div class="admin-param-card-title">
+                                    <i class="bi bi-box-arrow-in-right"></i>
+                                    Check In
+                                </div>
+                            </div>
+
+                            <div class="admin-param-list">
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Geo Required</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="geoRequiredCheckIn">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Photo Required</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="photoRequiredCheckIn">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Human Face Detection</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="faceDetectionIn">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Environment Analysis</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="environmentAnalysisIn">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Apply Distance</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="applyDistanceForCheckIn">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Max Distance</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="0.0001" min="0" id="maxDistanceForCheckIn"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">mi</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Apply Time Before</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="applyTimeBeforeCheckIn">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Min Minutes Before</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" max="120" id="minMinutesBeforeCheckIn"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">min</span>
+                                    </span>
+                                </label>
+
+                            </div>
+                        </div>
+
+                        <!-- BREAKS -->
+                        <div class="admin-param-card">
+                            <div class="admin-param-card-header">
+                                <div class="admin-param-card-title">
+                                    <i class="bi bi-pause-circle"></i>
+                                    Breaks
+                                </div>
+                            </div>
+
+                            <div class="admin-subblock-title">Start Break</div>
+                            <div class="admin-param-list">
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Geo Required</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="geoRequiredStartBreak">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Photo Required</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="photoRequiredStartBreak">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Apply Distance</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="applyDistanceForStartBreak">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Max Distance</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="0.0001" min="0" id="maxDistanceForStartBreak"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">mi</span>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div class="admin-subblock-title">End Break</div>
+                            <div class="admin-param-list">
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Geo Required</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="geoRequiredEndBreak">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Photo Required</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="photoRequiredEndBreak">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Apply Distance</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="applyDistanceForEndBreak">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Max Distance</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="0.0001" min="0" id="maxDistanceForEndBreak"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">mi</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Max Breaks</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="maxBreaks" class="admin-input">
+                                        <span class="admin-input-unit">qty</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- CHECK OUT -->
+                        <div class="admin-param-card">
+                            <div class="admin-param-card-header">
+                                <div class="admin-param-card-title">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    Check Out
+                                </div>
+                            </div>
+
+                            <div class="admin-param-list">
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Geo Required</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="geoRequiredCheckOut">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Photo Required</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="photoRequiredCheckOut">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Human Face Detection</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="faceDetectionOut">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Environment Analysis</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="environmentAnalysisOut">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Apply Distance</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="applyDistanceForCheckOut">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Max Distance</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="0.0001" min="0" id="maxDistanceForCheckOut"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">mi</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Apply Time Before</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="applyTimeBeforeCheckOut">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Min Minutes Before</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="minMinutesBeforeCheckOut"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">min</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Report Required For Check Out</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="reportRequiredForCheckOut">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-footer-actions">
+                        <button type="button" class="btn btn-danger admin-btn" id="btnCancelCheckInParams">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-submit-glp admin-btn" id="btnSaveCheckInParams">
+                            <i class="bi bi-check2"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- EXPRESS PARAMETERS VIEW -->
+            <section id="express-params-view" class="app-view admin-scroll-view" style="display:none;">
+                <div class="admin-wrap">
+                    <div class="gl-section-header">
+                        <div class="gl-section-title">
+                            <span class="gl-title-primary">EXPRESS IN/OUT</span>
+                            <span class="gl-title-secondary">PARAMETERS</span>
+                        </div>
+                        <button type="button" id="closeExpressParamsBtn" class="gl-scheduler-close"
+                            aria-label="Close Express Parameters">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <div id="expressParamsStatus" class="admin-status" style="display:none;"></div>
+
+                    <input type="hidden" id="express_idExpressParameters">
+                    <fieldset id="expressParamsFields" disabled style="border:0;padding:0;margin:0;min-width:0;">
+                        <div class="admin-section-group">
+                            <div class="admin-param-card">
+                                <div class="admin-param-card-header" hidden>
+                                    <div class="admin-param-card-title"><i class="bi bi-sliders"></i> Configuration
+                                    </div>
+                                </div>
+                                <div class="admin-param-list" hidden>
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Active</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="express_active">
+                                            <span class="admin-switch-slider">
+                                            </span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="admin-param-card">
+                                <div class="admin-param-card-header">
+                                    <div class="admin-param-card-title"><i class="bi bi-box-arrow-in-right"></i> Express
+                                        In</div>
+                                </div>
+                                <div class="admin-param-list"><label class="admin-param-row">
+                                        <span class="admin-param-row-label">Geo Required</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="express_geoRequiredIn"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label><label class="admin-param-row">
+                                        <span class="admin-param-row-label">Photo Required</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="express_photoRequiredIn"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label><label class="admin-param-row">
+                                        <span class="admin-param-row-label">Face Detection</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="express_faceDetectionIn"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label><label class="admin-param-row">
+                                        <span class="admin-param-row-label">Environment Analysis</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="express_environmentAnalysisIn"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label></div>
+                            </div>
+                            <div class="admin-param-card">
+                                <div class="admin-param-card-header">
+                                    <div class="admin-param-card-title"><i class="bi bi-box-arrow-right"></i> Express
+                                        Out</div>
+                                </div>
+                                <div class="admin-param-list"><label class="admin-param-row">
+                                        <span class="admin-param-row-label">Geo Required</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="express_geoRequiredOut"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label><label class="admin-param-row">
+                                        <span class="admin-param-row-label">Photo Required</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="express_photoRequiredOut"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label><label class="admin-param-row">
+                                        <span class="admin-param-row-label">Face Detection</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="express_faceDetectionOut"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label><label class="admin-param-row">
+                                        <span class="admin-param-row-label">Environment Analysis</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="express_environmentAnalysisOut"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label></div>
+                            </div>
+                            <div class="admin-param-card">
+                                <div class="admin-param-card-header">
+                                    <div class="admin-param-card-title"><i class="bi bi-images"></i> Mandatory Report
+                                        Photos</div>
+                                </div>
+                                <div class="admin-param-list"><label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Min Photos</span>
+                                        <span class="admin-inline-input"><input type="number" step="1" min="1"
+                                                max="32767" id="express_minPhotosMandatoryReport"
+                                                class="admin-input"><span class="admin-input-unit">qty</span></span>
+                                    </label><label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Max Photos</span>
+                                        <span class="admin-inline-input"><input type="number" step="1" min="1"
+                                                max="32767" id="express_maxPhotosMandatoryReport"
+                                                class="admin-input"><span class="admin-input-unit">qty</span></span>
+                                    </label></div>
+                            </div>
+                            <div class="admin-param-card">
+                                <div class="admin-param-card-header">
+                                    <div class="admin-param-card-title"><i class="bi bi-images"></i> Optional Report
+                                        Photos</div>
+                                </div>
+                                <div class="admin-param-list"><label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Min Photos</span>
+                                        <span class="admin-inline-input"><input type="number" step="1" min="0"
+                                                max="32767" id="express_minPhotosOptionalReport"
+                                                class="admin-input"><span class="admin-input-unit">qty</span></span>
+                                    </label><label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Max Photos</span>
+                                        <span class="admin-inline-input"><input type="number" step="1" min="0"
+                                                max="32767" id="express_maxPhotosOptionalReport"
+                                                class="admin-input"><span class="admin-input-unit">qty</span></span>
+                                    </label></div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="admin-footer-actions">
+                        <button type="button" class="btn btn-danger admin-btn"
+                            id="btnCancelExpressParams">Cancel</button>
+                        <button type="button" class="btn btn-submit-glp admin-btn" id="btnSaveExpressParams" disabled><i
+                                class="bi bi-check2"></i> Save</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REPORTS PARAMETERS VIEW -->
+            <section id="reports-params-view" class="app-view admin-scroll-view" style="display:none;">
+                <div class="admin-wrap">
+
+
+                    <div class="gl-section-header">
+                        <h2 class="gl-section-title">
+                            <span class="gl-title-primary">REPORTS</span>
+                            <span class="gl-title-secondary">PARAMETERS</span>
+                        </h2>
+
+                        <button type="button" id="closeReportsParamsBtn" class="gl-scheduler-close"
+                            aria-label="Close Reports Parameters">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+
+                    <div id="reportsParamsStatus" class="admin-status" style="display:none;"></div>
+
+                    <div class="admin-section-group">
+
+                        <!-- MODULE -->
+                        <div class="admin-param-card">
+                            <div class="admin-param-card-header">
+                                <div class="admin-param-card-title">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                    Reports Module
+                                </div>
+                            </div>
+
+                            <div class="admin-param-list">
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Reports Module Active</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="reportsModuleActive">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- RULES -->
+                        <div class="admin-param-card">
+                            <div class="admin-param-card-header">
+                                <div class="admin-param-card-title">
+                                    <i class="bi bi-sliders"></i>
+                                    Report Rules
+                                </div>
+                            </div>
+
+                            <div class="admin-param-list">
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Apply DFA Restriction</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="applyDfaRestriction">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Validate Photos While Upload</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="validatePhotosWhileUpload">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Validate Photos Post Upload</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="validatePhotosPostUpload">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Max Photos Allowed</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="maxPhotoAllowed" class="admin-input">
+                                        <span class="admin-input-unit">qty</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Min Photos Allowed</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="minPhotosAllowed" class="admin-input">
+                                        <span class="admin-input-unit">qty</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Allow Microphone Use For Summary</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="allowMicrophoseUseForSummary">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Max Seconds Summary Recording</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="maxSecondsSummaryRecording"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">sec</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Max Issues Field Length</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="maxIssuesFieldLength"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">chars</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Min Summary Field Length</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="minSummaryFieldLength"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">chars</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Max Summary Field Length</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="maxSummaryFieldLength"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">chars</span>
+                                    </span>
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-footer-actions">
+                        <button type="button" class="btn btn-danger admin-btn" id="btnCancelReportsParams">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-submit-glp admin-btn" id="btnSaveReportsParams">
+                            <i class="bi bi-check2"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REIMBURSEMENT PARAMETERS VIEW -->
+            <section id="reimb-params-view" class="app-view admin-scroll-view" style="display:none;">
+                <div class="admin-wrap">
+
+                    <div class="gl-section-header">
+                        <h2 class="gl-section-title">
+                            <span class="gl-title-primary">REIMBURSEMENTS</span>
+                            <span class="gl-title-secondary">PARAMETERS</span>
+                        </h2>
+
+                        <button type="button" id="closeReimbParamsBtn" class="gl-scheduler-close"
+                            aria-label="Close Reimbursement Parameters">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+
+                    <div id="reimbParamsStatus" class="admin-status" style="display:none;"></div>
+
+                    <div class="admin-section-group">
+
+                        <!-- MODULE -->
+                        <div class="admin-param-card">
+                            <div class="admin-param-card-header">
+                                <div class="admin-param-card-title">
+                                    <i class="bi bi-receipt"></i>
+                                    Reimbursements Module
+                                </div>
+                            </div>
+
+                            <div class="admin-param-list">
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Reimbursements Module Active</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="reimbursementsModuleActive">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- RULES -->
+                        <div class="admin-param-card">
+                            <div class="admin-param-card-header">
+                                <div class="admin-param-card-title">
+                                    <i class="bi bi-sliders"></i>
+                                    Request Rules
+                                </div>
+                            </div>
+
+                            <div class="admin-param-list">
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Default Approver Code</span>
+                                    <span class="admin-inline-input admin-inline-input-text">
+                                        <input type="text" id="defaulAproverCode" class="admin-input admin-input-text"
+                                            maxlength="20">
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Max Amount Approval</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="0.01" min="0" id="maxAmountApproval"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">$</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Allow Change Expense Date</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="allowChangeExpenseDate">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Max Days For Request After Expense</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="maxDaysForRequestAfterExpense"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">days</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Days Before Expense For Shift</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="daysBeforeExpenseForShift"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">days</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Day After Expense For Shift</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="dayAfterExpenseForShift"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">days</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Approval Route</span>
+                                    <span class="admin-inline-input admin-inline-input-select">
+                                        <select id="approvalRoute" class="admin-input admin-select">
+                                            <option value="ACC_TO_RMG">ACC_TO_RMG</option>
+                                            <option value="RMG_TO_ACC">RMG_TO_ACC</option>
+                                        </select>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Receipt Required For Request</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="receiptRequiredForRequest">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row">
+                                    <span class="admin-param-row-label">Shift Required For Request</span>
+                                    <span class="admin-switch">
+                                        <input type="checkbox" id="shiftRequiredForRequest">
+                                        <span class="admin-switch-slider"></span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Days For Yellow Card</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="daysForYellowCard"
+                                            class="admin-input">
+                                        <span class="admin-input-unit">days</span>
+                                    </span>
+                                </label>
+
+                                <label class="admin-param-row admin-param-row-input">
+                                    <span class="admin-param-row-label">Days For Red Card</span>
+                                    <span class="admin-inline-input">
+                                        <input type="number" step="1" min="0" id="daysForRedCard" class="admin-input">
+                                        <span class="admin-input-unit">days</span>
+                                    </span>
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-footer-actions">
+                        <button type="button" class="btn btn-danger admin-btn" id="btnCancelReimbParams">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-submit-glp admin-btn" id="btnSaveReimbParams">
+                            <i class="bi bi-check2"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- USERS ADMIN VIEW -->
+            <section id="users-admin-view" class="app-view admin-scroll-view" style="display:none;">
+                <div class="admin-wrap">
+                    <div class="users-sticky-header">
+                        <div class="gl-section-header">
+                            <div class="gl-section-title">
+                                <span class="gl-title-primary">USERS</span>
+                                <span class="gl-title-secondary">PARAMETERS</span>
+                            </div>
+
+                            <button type="button" id="closeUsersAdminBtn" class="gl-scheduler-close"
+                                aria-label="Close Users">
+                                <i class="bi bi-x-circle" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+
+                        <div class="users-search-bar" id="usersSearchBar">
+                            <div class="users-search-input-wrap">
+                                <i class="bi bi-search" aria-hidden="true"></i>
+                                <input type="search" id="usersSearchInput" placeholder="Search by code or name"
+                                    autocomplete="off" spellcheck="false" aria-label="Search users by code or name">
+                                <button type="button" id="usersSearchClear" class="users-search-clear"
+                                    aria-label="Clear search" hidden>
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </button>
+
+                            </div>
+                            <div class="users-search-count" id="usersSearchCount"></div>
+                        </div>
+                    </div> <!-- users-sticky-header -->
+
+                    <div id="usersStatus" class="admin-status" style="display:none;"></div>
+
+                    <!-- LIST VIEW -->
+                    <div id="usersListView">
+                        <div class="admin-section-group">
+                            <div class="admin-param-card">
+                                <div id="usersList" class="admin-users-list">
+                                    <!-- rows via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DETAIL VIEW -->
+                    <div id="usersDetailView" style="display:none;">
+                        <div class="admin-section-group">
+                            <div class="admin-param-card">
+                                <div class="admin-param-card-header">
+                                    <div class="admin-param-card-title">
+                                        <i class="bi bi-person-badge"></i>
+                                        Promoter Detail
+                                    </div>
+                                </div>
+
+                                <div class="admin-param-list">
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Code</span>
+                                        <span class="admin-inline-input admin-inline-input-text">
+                                            <input type="text" id="userDetailCode" class="admin-input admin-input-text"
+                                                readonly>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Name</span>
+                                        <span
+                                            class="admin-inline-input admin-inline-input-text admin-inline-input-wide">
+                                            <input type="text" id="userDetailName" class="admin-input admin-input-text"
+                                                readonly>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Market</span>
+                                        <span
+                                            class="admin-inline-input admin-inline-input-text admin-inline-input-wide">
+                                            <input type="text" id="userDetailMarket"
+                                                class="admin-input admin-input-text" readonly>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">State</span>
+                                        <span class="admin-inline-input admin-inline-input-text">
+                                            <input type="text" id="userDetailStateCode"
+                                                class="admin-input admin-input-text" readonly>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Phone</span>
+                                        <span
+                                            class="admin-inline-input admin-inline-input-text admin-inline-input-wide">
+                                            <input type="text" id="userDetailPhone" class="admin-input admin-input-text"
+                                                readonly>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Email</span>
+                                        <span
+                                            class="admin-inline-input admin-inline-input-text admin-inline-input-wide">
+                                            <input type="text" id="userDetailEmail" class="admin-input admin-input-text"
+                                                readonly>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Status</span>
+                                        <span class="admin-inline-input admin-inline-input-text">
+                                            <input type="text" id="userDetailPromoterStatus"
+                                                class="admin-input admin-input-text" readonly>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Supervisor Level</span>
+                                        <span class="admin-inline-input">
+                                            <input type="number" step="1" min="0" id="userDetailSupervisorLevel"
+                                                class="admin-input">
+                                            <span class="admin-input-unit">lvl</span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Active</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="userDetailActive">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Blocked For Update</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="userDetailBlockedForUpdate">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            <!-- EXPRESS PARAMETERS - PER PROMOTER -->
+                            <div class="admin-param-card">
+                                <div class="admin-param-card-header">
+                                    <div class="admin-param-card-title">
+                                        <i class="bi bi-geo-alt"></i> EXPRESS PARAMETERS
+                                    </div>
+                                </div>
+
+                                <div class="admin-param-list">
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">
+                                            Geolocation Required - Express In
+                                        </span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="userDetailGeoRequiredIn">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">
+                                            Geolocation Required - Express Out
+                                        </span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="userDetailGeoRequiredOut">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">
+                                            Photo Required - Express In
+                                        </span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="userDetailPhotoRequiredIn">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">
+                                            Photo Required - Express Out
+                                        </span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="userDetailPhotoRequiredOut">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                </div>
+                            </div>
+                            <!-- END EXPRESS PARAMETERS -->
+
+                            <div class="admin-param-card">
+                                <div class="admin-param-card-header">
+                                    <div class="admin-param-card-title"><i class="bi bi-camera"></i> PHOTO VALIDATION
+                                    </div>
+                                </div>
+                                <div class="admin-param-list">
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Human Face Detection - Express In</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="userDetailFaceDetectionIn"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label>
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Environment Analysis - Express In</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="userDetailEnvironmentAnalysisIn"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label>
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Human Face Detection - Express Out</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="userDetailFaceDetectionOut"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label>
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Environment Analysis — Express Out</span>
+                                        <span class="admin-switch"><input type="checkbox"
+                                                id="userDetailEnvironmentAnalysisOut"><span
+                                                class="admin-switch-slider"></span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="admin-footer-actions">
+                            <button type="button" class="btn btn-danger admin-btn" id="btnCancelUserDetail">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn btn-submit-glp admin-btn" id="btnSaveUserDetail">
+                                <i class="bi bi-check2"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- REIMBURSEMENT APPROVAL VIEW -->
+            <section id="reimbursementApprovalView" class="app-section" style="display:none;">
+
+                <!-- LIST HEADER -->
+                <div id="reimbursementApprovalListHeader" class="scheduler-header">
+                    <div class="header-close-row">
+                        <button type="button" id="closeReimbursementApprovalView" class="section-close-red"
+                            aria-label="Close Reimbursement Approval">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <div class="header-title-row">
+                        <h4 class="scheduler-title">REIMBURSEMENTS APPROVAL</h4>
+                    </div>
+                </div>
+
+                <!-- DETAIL HEADER -->
+                <div id="reimbursementApprovalDetailHeader" class="scheduler-header ra-detail-header"
+                    style="display:none;">
+                    <div class="header-close-row">
+                        <button type="button" id="closeReimbursementApprovalDetailView" class="section-close-red"
+                            aria-label="Close Reimbursement Approval Detail">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <div class="header-title-row">
+                        <h4 class="scheduler-title">REIMBURSEMENT DETAIL</h4>
+                    </div>
+                </div>
+
+                <div class="section-body">
+
+                    <!-- LIST VIEW -->
+                    <div id="reimbursementApprovalListWrap">
+                        <div id="reimbursementApprovalEmpty" class="empty-state" style="display:none;">
+                            No pending reimbursements found.
+                        </div>
+
+                        <div id="reimbursementApprovalList" class="pending-cards-list"></div>
+                    </div>
+
+                    <!-- DETAIL VIEW -->
+                    <div id="reimbursementApprovalDetailWrap" style="display:none;">
+
+                        <div class="reimb-approval-card">
+
+                            <div class="reimb-approval-grid">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Reimbursement ID</label>
+                                    <input type="text" id="ra_idReimbursement" class="form-control" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Promoter</label>
+                                    <input type="text" id="ra_promoterName" class="form-control" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Expense Date</label>
+                                    <input type="text" id="ra_expensesDate" class="form-control" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Amount</label>
+                                    <input type="number" step="0.01" id="ra_amount" class="form-control">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Expense Type</label>
+                                    <select id="ra_expensesType" class="form-select"></select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Shift Assigned</label>
+                                    <select id="ra_pk" class="form-select"></select>
+                                </div>
+
+                                <div class="mb-3 full-width">
+                                    <label class="form-label">Description</label>
+                                    <textarea id="ra_description" class="form-control" rows="4"></textarea>
+                                </div>
+
+                                <div class="mb-3 full-width">
+                                    <label class="form-label">Receipts</label>
+                                    <div id="ra_receiptPreview" class="receipt-preview-box ra-receipts-preview-box">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 full-width" id="raSentToManagerCommentsViewWrap" style="display:none;">
+                                    <label class="form-label">Default Approver Comments</label>
+                                    <textarea id="ra_sentToManagerCommentsView" class="form-control" rows="3"
+                                        readonly></textarea>
+                                </div>
+
+                                <div class="mb-3 full-width" id="raCheckedCommentsViewWrap" style="display:none;">
+                                    <label class="form-label">Manager Checked Reason</label>
+                                    <textarea id="ra_checkedCommentsView" class="form-control" rows="3"
+                                        readonly></textarea>
+                                </div>
+
+                                <div class="mb-3 full-width" id="raSentToManagerCommentsWrap" style="display:none;">
+                                    <label class="form-label">Comments for Manager</label>
+                                    <textarea id="ra_sentToManagerComments" class="form-control" rows="3"
+                                        placeholder="Please explain what the manager needs to review."></textarea>
+                                </div>
+
+                                <div class="mb-3 full-width" id="raRejectReasonWrap" style="display:none;">
+                                    <label class="form-label">Rejection Reason</label>
+                                    <textarea id="ra_rejectionReason" class="form-control" rows="3"
+                                        placeholder="Please explain why this reimbursement is being rejected."></textarea>
+                                </div>
+                                <div class="mb-3 full-width" id="raCheckedCommentsWrap" style="display:none;">
+                                    <label class="form-label">Manager Comments</label>
+                                    <textarea id="ra_checkedComments" class="form-control" rows="3"
+                                        placeholder="Please add comments before checking this reimbursement."></textarea>
+                                </div>
+
+                            </div>
+
+                            <div class="ra-actions">
+                                <!--
+                                <button type="button" id="raBtnBackToList" class="btn btn-outline-secondary">
+                                    Back
+                                </button>
+                                -->
+
+                                <button type="button" id="raBtnReject" class="btn btn-danger">
+                                    Reject
+                                </button>
+
+                                <button type="button" id="raBtnSendToManager" class="btn btn-warning text-dark">
+                                    Send to Manager
+                                </button>
+
+                                <button type="button" id="raBtnCheck" class="btn btn-success" style="display:none;">
+                                    Check
+                                </button>
+
+                                <button type="button" id="raBtnApprove" class="btn btn-success">
+                                    Accept
+                                </button>
+                            </div>
+
+                            <div id="raStatusMessage" class="local-status-banner" style="display:none;"></div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <div id="message-btn" onclick="hideMessage()" style="display: none;"></div>
+    </footer>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" aria-hidden="true">
+        <div class="cm-backdrop"></div>
+        <div class="cm-dialog" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+            <div class="cm-header">
+                <!-- fila botón -->
+                <div class="header-close-row">
+                    <button class="modal-close close-btn is-red">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                </div>
+                <!-- fila título -->
+                <div class="header-title-row">
+                    <h4>SUPPORT REQUEST</h4>
+                </div>
+            </div>
+            <div class="cm-body">
+                <p class="support-privacy-note">
+                    By contacting support, you agree to share diagnostic app information and any screenshot you choose
+                    to send.
+                </p>
+                <div class="support-wa-row">
+                    <button type="button" class="btn btn-success support-wa-btn" id="waSupportBtn">
+                        <i class="bi bi-whatsapp" aria-hidden="true"></i>
+                        Send via WhatsApp
+                    </button>
+                </div>
+                <p>You can also share screenshots to dsaucedo@golocalpromos.com </p>
+                <div id="supportIdentityWrap" class="support-identity-wrap" style="display:none;">
+                    <div class="support-identity-title">Please complete your contact details</div>
+                    <div class="support-identity-grid">
+                        <!-- NAME -->
+                        <div class="rc-group" id="grp_supportName">
+                            <label class="rc-label is-required" for="supportName">
+                                NAME<span class="rc-req" aria-hidden="true"></span>
+                            </label>
+                            <input type="text" id="supportName" name="support_contact_name_manual" class="rc-input"
+                                maxlength="80" autocomplete="off" autocorrect="off" autocapitalize="off"
+                                spellcheck="false">
+                            <div class="rc-error" id="err_supportName" style="display:none"></div>
+                        </div>
+
+                        <!-- CODE -->
+                        <div class="rc-group" id="grp_supportCode">
+                            <label class="rc-label is-required" for="supportCode">
+                                CODE<span class="rc-req" aria-hidden="true"></span>
+                            </label>
+                            <input type="text" id="supportCode" name="support_contact_code_manual" class="rc-input"
+                                maxlength="12" autocomplete="off" autocorrect="off" autocapitalize="off"
+                                spellcheck="false">
+                            <div class="rc-error" id="err_supportCode" style="display:none"></div>
+                        </div>
+
+                        <!-- PHONE -->
+                        <div class="rc-group" id="grp_supportPhone">
+                            <label class="rc-label is-required" for="supportPhone">
+                                PHONE<span class="rc-req" aria-hidden="true"></span>
+                            </label>
+                            <input type="text" id="supportPhone" name="support_contact_phone_manual" class="rc-input"
+                                maxlength="10" inputmode="numeric" pattern="[0-9]{1,10}" autocomplete="off"
+                                autocorrect="off" spellcheck="false">
+                            <div class="rc-error" id="err_supportPhone" style="display:none"></div>
+                        </div>
+
+                    </div>
+                    <div class="support-identity-actions">
+                        <button type="button" class="btn btn-outline-secondary"
+                            id="supportIdentityCancelBtn">Cancel</button>
+                        <button type="button" class="btn btn-success support-wa-btn" id="supportIdentityContinueBtn">
+                            <i class="bi bi-whatsapp" aria-hidden="true"></i>Continue
+                        </button>
+                    </div>
+                </div> <!-- Fin de supportIdentityWrap -->
+                <div id="supportShotWrap" style="display:none; margin-top:12px;">
+                    <div style="font-size:.9rem; color:#475569; margin-bottom:6px;">Captured screenshot:</div>
+                    <img id="supportShotPreview" alt="Support screenshot"
+                        style="width:100%; border:1px solid #dbe3f0; border-radius:10px;">
+                </div>
+            </div> <!-- Fin de cm-body -->
+        </div> <!-- Fin de cm-dialog -->
+    </div> <!-- Fin de contact-modal -->
+
+
+    <!-- Sales Parse & Edit Modal -->
+    <div id="sales-modal" class="rc-modal" aria-hidden="true" role="dialog" aria-labelledby="salesModalTitle">
+        <div class="rcm-backdrop" data-close="1"></div>
+        <div class="rcm-dialog" role="document" aria-modal="true">
+            <div class="rcm-header">
+                <h4 id="salesModalTitle">Sales</h4>
+                <button type="button" class="modal-close close-btn is-red" data-close="1" aria-label="Close">
+                    <i class="bi bi-x-circle-fill" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="rcm-body">
+                <div class="rc-table-wrap" style="margin-top:2px">
+                    <table class="rc-table" id="salesModalTable">
+                        <thead>
+                            <tr>
+                                <th class="coe-betauct">Product</th>
+                                <th class="col-qty">Qty</th>
+                                <th class="col-amount">$$$</th>
+                                <th class="col-actions"></th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- rows injected by JS --></tbody>
+                    </table>
+                </div>
+                <div class="rc-grandtotal" style="margin-top:10px">
+                    Grand Total: <strong id="salesModalTotal">$0.00</strong>
+                </div>
+            </div>
+
+            <div class="rcm-footer">
+                <button type="button" class="btn btn-light" data-close="1">Cancel</button>
+                <button type="button" class="btn btn-submit-glp" id="salesModalAccept">
+                    <i class="bi bi-check2"></i> Accept
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INVENTORY MODAL -->
+    <div class="rc-modal" id="inventory-modal" aria-hidden="true">
+        <div class="rcm-backdrop" data-close="1"></div>
+        <div class="rcm-dialog" role="dialog" aria-modal="true" aria-labelledby="inventoryModalTitle">
+
+            <div class="rcm-header">
+                <h4 id="inventoryModalTitle">INVENTORY / STOCK</h4>
+                <button type="button" class="modal-close close-btn is-red" data-close="1"
+                    aria-label="Close inventory editor">
+                    <i class="bi bi-x-circle-fill"></i>
+                </button>
+            </div>
+
+            <div class="rcm-body">
+                <div class="rc-actions" style="margin-bottom:8px; gap:6px; display:flex; flex-wrap:wrap;">
+                    <!-- Parse btn se inyecta vía JS usando #parse_stockTable -->
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="parse_stockTable" hidden>
+                        <i class="bi bi-magic"></i> Convert to table
+                    </button>
+
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="addrow_stockTable_modal">
+                        <i class="bi bi-plus-circle"></i> Add row
+                    </button>
+                </div>
+
+                <table class="rc-table" id="inventoryModalTable">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody><!-- rows go here dynamically --></tbody>
+                </table>
+            </div>
+
+            <div class="rcm-footer">
+                <button type="button" class="btn btn-outline-secondary" data-close="1">Cancel</button>
+                <button type="button" class="btn btn-submit-glp" id="inventoryModalAccept">
+                    <i class="bi bi-check2"></i> Accept
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Post-Report Saved Modal -->
+    <div class="modal fade" id="postReportModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content post-report-content">
+
+                <div class="modal-body post-report-body">
+
+                    <i class="bi bi-check-circle-fill post-report-icon"></i>
+
+                    <h5 class="post-report-title">
+                        REPORT SAVED
+                    </h5>
+
+                    <p class="post-report-success">
+                        Your report was submitted successfully.
+                    </p>
+
+                    <div class="post-report-divider"></div>
+
+                    <p class="post-report-instruction">
+                        Press Continue to proceed with Check Out.
+                    </p>
+
+                    <button type="button" id="postReportProceedBtn" class="btn btn-primary post-report-btn">
+                        Continue
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- No Break Reason Modal -->
+    <div class="modal fade" id="noBreakModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Did you take your break?</h5>
+                    <button type="button" class="gl-no-break-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="mb-3">Before checking out, please tell us what happened with your break.</p>
+
+                    <div id="noBreakOptions" class="d-grid gap-2">
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="noBreakReason"
+                                value="I forgot to register my break">
+                            <span class="form-check-label">I forgot to register my break</span>
+                        </label>
+
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="noBreakReason"
+                                value="I was unable to take my break due to workload">
+                            <span class="form-check-label">I was unable to take my break due to workload</span>
+                        </label>
+
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="noBreakReason"
+                                value="My store manager did not allow a break at that time">
+                            <span class="form-check-label">My store manager did not allow a break at that time</span>
+                        </label>
+
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="noBreakReason"
+                                value="The store was too busy to take a break">
+                            <span class="form-check-label">The store was too busy to take a break</span>
+                        </label>
+
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="noBreakReason"
+                                value="I did not take a break during this shift">
+                            <span class="form-check-label">I did not take a break during this shift</span>
+                        </label>
+
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="noBreakReason"
+                                value="I did not understand the break process">
+                            <span class="form-check-label">I did not understand the break process</span>
+                        </label>
+                    </div>
+
+                    <div class="no-break-disclaimer">
+                        Breaks are provided in accordance with applicable labor laws.
+                    </div>
+
+
+                    <div id="noBreakError" class="text-danger mt-3" style="display:none;">
+                        Please select one option to continue.
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="btnNoBreakContinue">Continue</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Code Modal -->
+    <div id="forgotCodeModal" class="forgot-code-modal" aria-hidden="true">
+        <div class="forgot-code-backdrop"></div>
+
+        <div class="forgot-code-dialog" role="dialog" aria-modal="true" aria-labelledby="forgotCodeTitle">
+            <div class="forgot-code-header">
+                <button type="button" id="forgotCodeCloseBtn" class="modal-close close-btn is-red" aria-label="Close">
+                    <i class="bi bi-x-circle"></i>
+                </button>
+
+                <h4 id="forgotCodeTitle">RECOVER ACCESS CODE</h4>
+            </div>
+
+            <div class="forgot-code-body">
+                <p class="forgot-code-help">
+                    Enter your registered Go Local email address.
+                </p>
+
+                <div class="rc-group" id="grp_forgotCodeEmail">
+                    <label class="rc-label is-required" for="forgotCodeEmail">
+                        REGISTERED EMAIL<span class="rc-req" aria-hidden="true"></span>
+                    </label>
+                    <input type="email" id="forgotCodeEmail" class="rc-input" autocomplete="email"
+                        placeholder="name@example.com">
+                    <div class="rc-error" id="err_forgotCodeEmail" style="display:none"></div>
+                </div>
+
+                <div id="forgotCodeStatus" class="forgot-code-status" style="display:none;"></div>
+            </div>
+
+            <div class="forgot-code-footer">
+                <button type="button" id="forgotCodeCancelBtn" class="btn btn-danger">Cancel</button>
+                <button type="button" id="forgotCodeSendBtn" class="btn btn-submit-glp">
+                    <i class="bi bi-envelope-check"></i> Send Code
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Supervisor Signals Modal -->
+    <div class="modal fade" id="lsSignalsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ls-signals-dialog">
+            <div class="modal-content ls-signals-modal">
+
+                <div class="ls-signals-shell">
+
+                    <div class="gl-section-header ls-signals-topbar">
+                        <div class="gl-section-title">
+                            <span class="gl-title-primary">SHIFT</span>
+                            <span class="gl-title-secondary">FLAGS</span>
+                        </div>
+
+                        <button type="button" class="gl-scheduler-close" data-bs-dismiss="modal"
+                            aria-label="Close Shift Flags">
+                            <i class="bi bi-x-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <div class="ls-signals-summary admin-status" aria-live="polite">
+                        <div id="sfLine1"></div>
+                        <div id="sfLine2"></div>
+                        <div id="sfLine3"></div>
+                    </div>
+
+                    <div class="ls-signals-body">
+                        <form id="lsSignalsForm">
+                            <input type="hidden" id="lsSignalsPk">
+
+                            <!-- CHECK IN -->
+                            <div class="admin-param-card ls-admin-card">
+                                <div class="admin-param-card-header">
+                                    <div class="admin-param-card-title">
+                                        <i class="bi bi-box-arrow-in-right"></i>
+                                        CHECK IN FLAGS
+                                    </div>
+                                </div>
+
+                                <div class="admin-param-list">
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Apply Check In Distance Restriction</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="applyCheckInDistanceRestriction">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Photo Required For Check In</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="requirePhotoCheckIn">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Human Face Detection</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="shiftFaceDetectionIn">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Environment Analysis</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="shiftEnvironmentAnalysisIn">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Allow Early Check In</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="allowEarlyCheckIn">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Enable Late Check In Alerts</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="enableLateCheckInAlerts">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Late Check In Alerts Counter</span>
+                                        <span class="admin-inline-input">
+                                            <input type="number" readonly min="0" step="1" class="admin-input"
+                                                id="lateAlertsCounter">
+                                            <span class="admin-input-unit">qty</span>
+                                        </span>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            <!-- CHECK OUT -->
+                            <div class="admin-param-card ls-admin-card">
+                                <div class="admin-param-card-header">
+                                    <div class="admin-param-card-title">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        CHECK OUT FLAGS
+                                    </div>
+                                </div>
+
+                                <div class="admin-param-list">
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Apply Check Out Time Restriction</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="applyCheckOutTimeRestriction">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Photo Required For Check Out</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="requirePhotoCheckOut">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Human Face Detection</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="shiftFaceDetectionOut">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Environment Analysis</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="shiftEnvironmentAnalysisOut">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Enable Check Out Alerts</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="enableCheckOutAlerts">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Late Check Out Alerts Counter</span>
+                                        <span class="admin-inline-input">
+                                            <input type="number" readonly min="0" step="1" class="admin-input"
+                                                id="lateCheckOutAlertsCounter">
+                                            <span class="admin-input-unit">qty</span>
+                                        </span>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            <!-- BREAK / REPORT -->
+                            <div class="admin-param-card ls-admin-card">
+                                <div class="admin-param-card-header">
+                                    <div class="admin-param-card-title">
+                                        <i class="bi bi-pause-circle"></i>
+                                        BREAKS & REPORT FLAGS
+                                    </div>
+                                </div>
+
+                                <div class="admin-param-list">
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Require Break</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="requireBreak">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Max Breaks Allowed</span>
+                                        <span class="admin-inline-input">
+                                            <input type="number" min="0" step="1" class="admin-input"
+                                                id="maxBreaksAllowed">
+                                            <span class="admin-input-unit">qty</span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row admin-param-row-input">
+                                        <span class="admin-param-row-label">Breaks Counter</span>
+                                        <span class="admin-inline-input">
+                                            <input type="number" readonly min="0" step="1" class="admin-input"
+                                                id="breaksCounter">
+                                            <span class="admin-input-unit">qty</span>
+                                        </span>
+                                    </label>
+
+                                    <label class="admin-param-row">
+                                        <span class="admin-param-row-label">Mandatory Report Before Check Out</span>
+                                        <span class="admin-switch">
+                                            <input type="checkbox" id="mandatoryReportBeforeCheckOut">
+                                            <span class="admin-switch-slider"></span>
+                                        </span>
+                                    </label>
+
+                                </div>
+                            </div>
+                        </form>
+
+                        <div id="lsSignalsStatus" role="status" aria-live="polite" style="display:none;"></div>
+
+                        <div class="admin-footer-actions ls-signals-footer">
+                            <button type="button" class="admin-btn ls-signals-cancel" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="button" class="admin-btn ls-signals-save" id="lsSignalsSubmitBtn">
+                                <i class="bi bi-check2"></i> Save
+                            </button>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRAINING VIDEO PLAYER -->
+    <div id="trainingVideoPlayerOverlay" class="training-player-overlay" aria-hidden="true" style="display:none;">
+        <div class="training-player-card">
+            <div class="training-player-header">
+                <div class="training-player-header-top">
+                    <button type="button" id="closeTrainingVideoPlayerBtn" class="section-close-red"
+                        aria-label="Close video">
+                        <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div class="training-player-header-title">
+                    <h4 id="trainingPlayerTitle" class="training-player-title">VIDEO</h4>
+                </div>
+            </div>
+
+            <div class="training-player-body">
+                <video id="trainingVideoEl" class="training-video-el" playsinline webkit-playsinline preload="metadata"
+                    controlsList="nodownload noplaybackrate nofullscreen" disablepictureinpicture>
+                    <source id="trainingVideoSource" src="" type="video/mp4">
+                </video>
+
+                <div class="training-player-controls">
+                    <button type="button" class="btn btn-primary training-player-control-btn"
+                        id="toggleTrainingVideoBtn">
+                        <i class="bi bi-play-fill"></i> Play
+                    </button>
+
+                    <button type="button" class="btn btn-outline-secondary training-player-control-btn"
+                        id="replayTrainingVideoBtn">
+                        <i class="bi bi-arrow-clockwise"></i> Replay
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================
+     EXPRESS PHOTO REQUIREMENT NOTICE
+    ========================================================= -->
+    <div class="offcanvas offcanvas-end express-photo-notice" tabindex="-1" id="expressPhotoNotice"
+        aria-labelledby="expressPhotoNoticeTitle" data-bs-backdrop="static" data-bs-keyboard="false">
+
+        <div class="express-photo-notice-header">
+            <h5 id="expressPhotoNoticeTitle">IMPORTANT</h5>
+            <h5 id="expressPhotoNoticeBadge">PHOTOS REQUIRED</h5>
+        </div>
+
+        <div class="offcanvas-body express-photo-notice-body">
+
+            <p id="expressPhotoNoticeText" class="express-photo-notice-text"></p>
+
+            <div class="express-photo-notice-tip">
+                <i class="bi bi-info-circle-fill"></i>
+                <span>
+                    Take relevant photos during your work session
+                    and keep them available until you complete your report.
+                </span>
+            </div>
+
+            <button type="button" id="expressPhotoNoticeOk" class="btn btn-success w-100 express-photo-notice-ok">
+                OK
+            </button>
+
+        </div>
+    </div>
+
+
+    <!-- Receipt Zoom Overlay -->
+    <div id="raReceiptZoomOverlay" class="ra-receipt-zoom-overlay" aria-hidden="true" style="display:none;">
+        <div class="ra-receipt-zoom-backdrop"></div>
+
+        <div class="ra-receipt-zoom-shell">
+            <button type="button" id="raReceiptZoomClose" class="ra-receipt-zoom-close close-btn is-red"
+                aria-label="Close receipt zoom">
+                <i class="bi bi-x-circle" aria-hidden="true"></i>
+            </button>
+
+            <div class="ra-receipt-zoom-body" id="raReceiptZoomBody">
+                <img id="raReceiptZoomImg" src="" alt="Receipt preview enlarged">
+                <div id="raReceiptMagnifier" class="ra-receipt-magnifier" aria-hidden="true"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECORD SENDING STATUS MODAL -->
+    <div class="modal fade" id="recordSendingStatusModal" tabindex="-1" aria-labelledby="recordSendingStatusTitle"
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" data-bs-focus="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center">
+
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title" id="recordSendingStatusTitle">
+                        RECORD SENDING STATUS
+                    </h5>
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="recordSendingStatusIcon" class="mb-3"></div>
+
+                    <div id="recordSendingStatusMessage">
+                        Record Saved
+                    </div>
+
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn" id="recordSendingStatusOkBtn">
+                        OK
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- END RECORD SENDING STATUS MODAL -->
+
+
+    <datalist id="rcProductsList"></datalist>
+    <datalist id="rcBrandsList"></datalist>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/heic2any/dist/heic2any.min.js"></script>
+    <!-- MediaPipe Vision -->
+    <script>
+        window.__mediapipeVisionPromise = import(
+            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.mjs"
+        );
+    </script>
+    <script src="js/functions-beta-4000.js?v=4000-10291647"></script>
+    <script src="js/main-beta-4000.js?v=4000-10291647"></script>
+
+</body>
+
+</html>

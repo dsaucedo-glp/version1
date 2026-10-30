@@ -1,0 +1,1 @@
+ const ipapiurl = "https://ipapi.co/json/?key=XhBYXoLsaPG5jUT5YpXw8fhehHTN2vafZLfWBhkalOz4X7oOM4";

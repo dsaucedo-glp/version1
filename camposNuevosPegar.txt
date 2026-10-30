@@ -1,0 +1,4 @@
+faceDetectionIn
+faceDetectionOut
+environmentAnalysisIn
+environmentAnalysisOut

@@ -1,0 +1,27 @@
+<!--
+  Go Local – Late Check-In Alert (email body)
+  Replace every {{PLACEHOLDER}} with the alert data (see field-mapping.csv).
+  Logo: attach logo.png inline with Content-ID "logo.png",
+        OR host it and replace src="cid:logo.png" with the public URL.
+-->
+<div style="margin:0;padding:16px;background:#FFFFFF;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;margin:0 auto;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;color:#010F3C;">
+  <tr><td style="border-top:4px solid #FF4F2A;padding:16px 0 8px;">
+    <img src="cid:logo.png" width="130" height="40" alt="Go Local Promotions" style="display:block;border:0;">
+  </td></tr>
+  <tr><td style="padding:8px 0 4px;color:#FF4F2A;font-size:13px;font-weight:bold;letter-spacing:1px;">{{ALERT_LABEL}}</td></tr>
+  <tr><td style="padding:0 0 16px;font-size:22px;font-weight:bold;">{{PROMOTER}}</td></tr>
+  <tr><td style="padding:0 0 16px;font-size:15px;line-height:22px;">Dear Managers, this BA has not checked in yet. Please follow up.</td></tr>
+  <tr><td style="font-size:15px;line-height:26px;">
+    <span style="color:#595959;">Promotion:</span> {{PROMOTION}}<br>
+    <span style="color:#595959;">Market:</span> {{MARKET}}<br>
+    <span style="color:#595959;">Shift date:</span> {{SHIFT_DATE}}<br>
+    <span style="color:#595959;">From/To:</span> {{FROM_TO}}<br>
+    <span style="color:#595959;">PK:</span> <b style="color:#FF4F2A;">{{PK}}</b>
+  </td></tr>
+  <tr><td style="padding:24px 0 0;border-bottom:1px solid #E7E7E7;"></td></tr>
+  <tr><td style="padding:10px 0 0;font-size:11px;color:#595959;">
+    Go Local Automated Messages · <a href="https://www.golocalpromos.com" style="color:#FF4F2A;text-decoration:none;">golocalpromos.com</a>
+  </td></tr>
+</table>
+</div>
